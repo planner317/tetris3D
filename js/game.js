@@ -387,7 +387,7 @@ Game.prototype = {
       this.boom[2] = new Audio("audio/p3.mp3")
     }
     else {
-      this.sound = new Audioaudio/theme.mp3")
+      this.sound = new Audio("audio/theme.mp3")
       this.sound.play();
       this.boom[0] = new Audio("audio/d1.wav")
       this.boom[1] = new Audio("audio/d2.wav")
