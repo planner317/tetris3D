@@ -1,0 +1,89 @@
+<html>
+
+<head>
+  <title>Tetris3D</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="css/default.css">
+</head>
+
+<body>
+  <div id="game-info">
+    <div id="level-label">Level 1</div>
+    <div id="points-label">Points: 0</div>
+  </div>
+
+    <div id="controls">
+      <h3>Controls</h3>
+      <p><b>W A S D</b><br><span class="control-description">- Передвинуть фигуру</span></p>
+      <p><b>4 6</b><br><span class="control-description">- Врощать камеру вокруг оси</span></p>
+      <p><b>Вращать фигуру</b><br>1 2 3</p>
+      <p><b>Space</b><br><span class="control-description">- вниз</span></p>
+      <p><b>Enter</b><br><span class="control-description mouse">- Pause (<img src="./img/MouseL.png"> вражать камеру <img src="./img/MouseM.png"> приблизить)</span></p>
+      <p><b>Escape</b><br><span class="control-description">- Выход</span></p>
+      <p><b>M</b><br><span class="control-description">- приглушить музыку</span></p>
+      <p><b>C</b><br><span class="control-description">- убрать текстуру</span></p>
+    </div>
+
+
+
+    <div id="overlay">
+      <div id="overlay-start-game" class="hidden">
+        <h1>New Game</h1>
+      </div>
+
+      <div id="overlay-paused" class="hidden">
+        <h1>PAUSED</h1>
+      </div>
+
+      <div id="overlay-game-over" class="hidden">
+        <h1>GAME OVER</h1>
+      </div>
+
+      <div id="overlay-board-selector">
+        <p>Настройка игры:</p>
+        <div class="style-select">
+          <p>площадь поля</p>
+          <p id="pole">4 x 4</p>
+          <input type="range" id="range" value="4" min="4" max="20" onchange="setPole(event);"><br>
+          
+            <p class="flex">
+            <span>форма</span><select onchange="setForm(event)">
+              <option value="0">куб</option>
+              <option value="1">сфера</option>
+              <option value="2">куб-компаньон</option>
+              <option value="3">каша</option>
+            </select><br>
+          </p>
+          <p class="flex">
+            <span>материал</span><select onchange="setMat(event)">
+              <option value="0">металл</option>
+              <option value="1">дерево</option>
+              <option value="2">губка</option>
+              <option value="3">сетка</option>
+              <option value="4">камень</option>
+            </select>
+          </p>
+        </div>
+
+        <p id="overlay-play-button"><span class="button" onclick="startGame();">Play</span></p>
+      </div>
+    </div>
+
+
+  <script src="js/three.min.js"></script>
+  <script src="js/OBJLoader.js"></script>
+  <script src="js/OrbitControls.js"></script>
+  <script src="js/texture317.js"></script>
+  <script src="js/material317.js"></script>
+  <script src="js/cube_portal.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/block.js"></script>
+  <script src="js/cube.js"></script>
+  <script src="js/boards.js"></script>
+  <script src="js/blocks.js"></script>
+
+</body>
+
+</html>
