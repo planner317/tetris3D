@@ -36,32 +36,32 @@ function Texture317() {
             this.looseBump = texture;
         }
     );
-    new THREE.TextureLoader().load("/img/Loose.Mask.jpg",
+    new THREE.TextureLoader().load("img/Loose.Mask.jpg",
         (texture) => {
             this.looseAlfa = texture;
             console.log('Loose.Mask.jpg');
 
         });
     //////////////////
-    new THREE.TextureLoader().load("/img/stone.jpg",
+    new THREE.TextureLoader().load("img/stone.jpg",
         (texture) => {
             this.stone = texture;
         }
     );
     ////////////////////////////
-    new THREE.TextureLoader().load("/img/lavatile.jpg",
+    new THREE.TextureLoader().load("img/lavatile.jpg",
         (texture) => {
             this.lava = texture;
         }
     );
     ////////////////////////////
-    new THREE.TextureLoader().load("/img/FloorsNormal.jpg",
+    new THREE.TextureLoader().load("img/FloorsNormal.jpg",
         (texture) => {
             this.floorNormal = texture;
         }
     );
     ////////////////////////////
-    new THREE.TextureLoader().load("/img/portal_360.jpg",
+    new THREE.TextureLoader().load("img/portal_360.jpg",
         (texture) => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
 
@@ -70,12 +70,12 @@ function Texture317() {
         }
     );
     ////////////////////////////
-    new THREE.TextureLoader().load("/model/cube_heart.jpg",
+    new THREE.TextureLoader().load("model/cube_heart.jpg",
         (texture) => {
             this.portalCubeD = texture;
         }
     );
-    new THREE.TextureLoader().load("/model/cube_heart_light.jpg",
+    new THREE.TextureLoader().load("model/cube_heart_light.jpg",
     (texture) => {
         this.portalCubeL = texture;
     }

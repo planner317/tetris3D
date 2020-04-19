@@ -25,11 +25,11 @@ function PortalCube() {
 
   // texture Diffuse
   var textureLoader = new THREE.TextureLoader(manager);
-  var textureD = textureLoader.load('../model/cube_heart.jpg');
+  var textureD = textureLoader.load('model/cube_heart.jpg');
 
   // texture Light
   var textureLoader = new THREE.TextureLoader(manager);
-  var textureL = textureLoader.load('../model/cube_heart_light.jpg');
+  var textureL = textureLoader.load('model/cube_heart_light.jpg');
   // model
   function onProgress(xhr) {
     if (xhr.lengthComputable) {
@@ -42,7 +42,7 @@ function PortalCube() {
 
   var objLoader = new THREE.OBJLoader(manager);
 
-  objLoader.load('../model/cub.obj', function (obj) {
+  objLoader.load('model/cub.obj', function (obj) {
     portalCube = obj;
   }, onProgress, onError);
 

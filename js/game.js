@@ -380,18 +380,18 @@ Game.prototype = {
     // and add it to the camera, then we need to create a global audio
     // source.
     if (userGeometry == 2) {
-      this.sound = new Audio("../audio/portal.mp3")
+      this.sound = new Audio("audio/portal.mp3")
       this.sound.play()
-      this.boom[0] = new Audio("./../audio/p1.mp3")
-      this.boom[1] = new Audio("./../audio/p2.mp3")
-      this.boom[2] = new Audio("./../audio/p3.mp3")
+      this.boom[0] = new Audio("audio/p1.mp3")
+      this.boom[1] = new Audio("audio/p2.mp3")
+      this.boom[2] = new Audio("audio/p3.mp3")
     }
     else {
-      this.sound = new Audio("../audio/theme.mp3")
+      this.sound = new Audioaudio/theme.mp3")
       this.sound.play();
-      this.boom[0] = new Audio("./../audio/d1.wav")
-      this.boom[1] = new Audio("./../audio/d2.wav")
-      this.boom[2] = new Audio("./../audio/d3.mp3")
+      this.boom[0] = new Audio("audio/d1.wav")
+      this.boom[1] = new Audio("audio/d2.wav")
+      this.boom[2] = new Audio("audio/d3.mp3")
     }
     this.sound.volume = this.boom[0].volume = this.boom[1].volume = this.boom[2].volume = 0.5
     this.sound.loop = true
