@@ -61,7 +61,7 @@ function Texture317() {
         }
     );
     ////////////////////////////
-    new THREE.TextureLoader().load("img/portal_360.jpg",
+    new THREE.TextureLoader().load("img/fon/portal_360.jpg",
         (texture) => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
 
@@ -76,9 +76,23 @@ function Texture317() {
         }
     );
     new THREE.TextureLoader().load("model/cube_heart_light.jpg",
-    (texture) => {
-        this.portalCubeL = texture;
-    }
-);
+        (texture) => {
+            this.portalCubeL = texture;
+        }
 
+    );
+
+    //cubemap
+    var path = 'img/fon/portal.';
+    var format = '.jpg';
+    var urls = [
+        path + 'right' + format,
+        path + 'left' + format,
+        path + 'top' + format, 
+        path + 'bottom' + format,
+        path + 'front' + format, 
+        path + 'back' + format
+    ];
+
+    this.portalFonCube = new THREE.CubeTextureLoader().load(urls);
 }

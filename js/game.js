@@ -29,8 +29,6 @@ var Game = function () {
   this.pointsLabel = document.getElementById("points-label");
 
   // Initialize some public variables.
-  this.rotateCameraLeft
-  this.rotateCameraRight
   this.cubeMat = CUBMAT;
   this.cameraRot = 0;
   this.dropThreshold = 1;
@@ -79,13 +77,8 @@ Game.prototype = {
     this.scene = new THREE.Scene();
     
     /////////////////// СФЕРА ДЛЯ ПАНОРАМЫ
-    if (userGeometry == 2) {
-      var shereP = new THREE.SphereBufferGeometry(5000, 60, 40)
-      shereP.scale(- 1, 1, 1);
-      var materialP = new THREE.MeshBasicMaterial({ map: texture317.portal360 });
-      this.scene.add(new THREE.Mesh(shereP, materialP))
-      
-    } else this.scene.background = new THREE.Color(0x103044);
+    if (userGeometry == 2) this.scene.background = texture317.portalFonCube;
+     else this.scene.background = new THREE.Color(0x103044);
     // The renderer renders the scene using the objects, lights and camera.
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -107,7 +100,7 @@ Game.prototype = {
     this.orbit.minDistance = 50
     this.orbit.maxDistance = 1000
     this.orbit.target.y = CAMERA_POINT_Y
-
+    this.orbit.update()
     // Add light to the scene.
     var ambientLight = new THREE.AmbientLight(0x454545);
     this.scene.add(ambientLight);
@@ -165,7 +158,6 @@ Game.prototype = {
       this.scene.add(axisHelper);
     }
 
-
     // Add key listener.
     if (!this.keysAreBound) {
       // Set flag.
@@ -177,22 +169,22 @@ Game.prototype = {
         console.log("keydown:", e.key);
         if (e.key == "ArrowUp" || e.key == "w") {
           if (!thisGame.paused) {
-            thisGame.shiftBlockUp();
+            thisGame.moveAndRotate("up")
           }
         }
         if (e.key == "ArrowDown" || e.key == "s") {
           if (!thisGame.paused) {
-            thisGame.shiftBlockDown();
+            thisGame.moveAndRotate("back")
           }
         }
         if (e.key == "ArrowLeft" || e.key == "a") {
           if (!thisGame.paused) {
-            thisGame.shiftBlockLeft();
+            thisGame.moveAndRotate("left")
           }
         }
         if (e.key == "ArrowRight" || e.key == "d") {
           if (!thisGame.paused) {
-            thisGame.shiftBlockRight();
+            thisGame.moveAndRotate("right")
           }
         }
         if (e.key == " ") {
@@ -203,17 +195,17 @@ Game.prototype = {
         }
         if (e.key == "q" || e.key == "1") {
           if (!thisGame.paused) {
-            thisGame.rotateBlockX();
+            thisGame.moveAndRotate("rotateX")
           }
         }
         if (e.key == "f" || e.key == "3") {
           if (!thisGame.paused) {
-            thisGame.rotateBlockY();
+            thisGame.board.rotateBlockY();
           }
         }
         if (e.key == "e" || e.key == "2") {
           if (!thisGame.paused) {
-            thisGame.rotateBlockZ();
+            thisGame.moveAndRotate("rotateZ")
           }
         }
         if (e.key == "Enter") {
@@ -222,16 +214,7 @@ Game.prototype = {
         if (e.key == "m") {
           thisGame.toggleMusic();
         }
-        if (e.key == "4") {
-          if (!thisGame.paused) {
-            thisGame.rotateCameraLeft = true
-          }
-        }
-        if (e.key == "6") {
-          if (!thisGame.paused) {
-            thisGame.rotateCameraRight = true
-          }
-        }
+
         if (e.key == "Escape") {
           thisGame.endGame();
         }
@@ -245,130 +228,42 @@ Game.prototype = {
         }
       });
     }
-    document.addEventListener("keyup", e => {
-      if (e.key == "4") {
-        thisGame.rotateCameraLeft = false
-      }
-      if (e.key == "6") {
-        thisGame.rotateCameraRight = false
-      }
 
-    })
     // Attach the threeJS renderer to the HTML page
     document.body.append(this.renderer.domElement);
 
   },
+  
+  moveAndRotate:function (e){
 
-  // Move block up.
-  shiftBlockUp: function () {
-    // The block needs to be shifted the correct direction based on
-    // the angle.
-    if (this.cameraRot >= Math.PI / 4 && this.cameraRot < (3 * Math.PI) / 4) {
-      // Pi / 4 <= x < 3Pi / 4
-      this.board.shiftBlockX(-1);
-    } else if (this.cameraRot >= (3 * Math.PI) / 4 && this.cameraRot < (5 * Math.PI) / 4) {
-      // 3Pi / 4 <= x < 5Pi / 4
-      this.board.shiftBlockZ(1);
-    } else if (this.cameraRot >= (5 * Math.PI) / 4 && this.cameraRot < (7 * Math.PI) / 4) {
-      // 5Pi / 4 <= x < 7Pi / 4
-      this.board.shiftBlockX(1);
-    } else {
-      // -Pi / 4 <= x < Pi / 4
-      this.board.shiftBlockZ(-1);
-    }
-  },
+    var k=0;
+    var x= Math.abs( this.camera.position.x );
+    var z= Math.abs( this.camera.position.z );
+    var p=this.camera.position.x-this.camera.position.z
+    if ( p < 0 && x<z ) k=3
+    if ( p < 0 && x>z ) k=4
+    if ( p > 0 && x>z ) k=2
+    if ( p > 0 && x<z ) k=1
+    console.log(k);
 
-  // Move block down.
-  shiftBlockDown: function () {
-    // The block needs to be shifted the correct direction based on
-    // the angle.
-    if (this.cameraRot >= Math.PI / 4 && this.cameraRot < (3 * Math.PI) / 4) {
-      // Pi / 4 <= x < 3Pi / 4
-      this.board.shiftBlockX(1);
-    } else if (this.cameraRot >= (3 * Math.PI) / 4 && this.cameraRot < (5 * Math.PI) / 4) {
-      // 3Pi / 4 <= x < 5Pi / 4
-      this.board.shiftBlockZ(-1);
-    } else if (this.cameraRot >= (5 * Math.PI) / 4 && this.cameraRot < (7 * Math.PI) / 4) {
-      // 5Pi / 4 <= x < 7Pi / 4
-      this.board.shiftBlockX(-1);
-    } else {
-      // -Pi / 4 <= x < Pi / 4
-      this.board.shiftBlockZ(1);
-    }
-  },
+    if (e=="left" && k==3 || e=="up" && k==2 || e=="right" && k==1 || e=="back" && k==4) this.board.shiftBlockX(-1);
+    if (e=="left" && k==1 || e=="up" && k==4 || e=="right" && k==3 || e=="back" && k==2) this.board.shiftBlockX(1);
+    if (e=="left" && k==4 || e=="up" && k==3 || e=="right" && k==2 || e=="back" && k==1) this.board.shiftBlockZ(-1);
+    if (e=="left" && k==2 || e=="up" && k==1 || e=="right" && k==4 || e=="back" && k==3) this.board.shiftBlockZ(1);
 
-  // Move block left.
-  shiftBlockLeft: function () {
-    // The block needs to be shifted the correct direction based on
-    // the angle.
-    if (this.cameraRot >= Math.PI / 4 && this.cameraRot < (3 * Math.PI) / 4) {
-      // Pi / 4 <= x < 3Pi / 4
-      this.board.shiftBlockZ(1);
-    } else if (this.cameraRot >= (3 * Math.PI) / 4 && this.cameraRot < (5 * Math.PI) / 4) {
-      // 3Pi / 4 <= x < 5Pi / 4
-      this.board.shiftBlockX(1);
-    } else if (this.cameraRot >= (5 * Math.PI) / 4 && this.cameraRot < (7 * Math.PI) / 4) {
-      // 5Pi / 4 <= x < 7Pi / 4
-      this.board.shiftBlockZ(-1);
-    } else {
-      // -Pi / 4 <= x < Pi / 4
-      this.board.shiftBlockX(-1);
-    }
+    if (e=="rotateX" && k==3 || e=="rotateX" && k==1 || e=="rotateZ" && k==2 || e=="rotateZ" && k==4) this.board.rotateBlockX()
+    if (e=="rotateX" && k==2 || e=="rotateX" && k==4 || e=="rotateZ" && k==3 || e=="rotateZ" && k==1) this.board.rotateBlockZ()
   },
-
-  // Move block right.
-  shiftBlockRight: function () {
-    // The block needs to be shifted the correct direction based on
-    // the angle.
-    if (this.cameraRot >= Math.PI / 4 && this.cameraRot < (3 * Math.PI) / 4) {
-      // Pi / 4 <= x < 3Pi / 4
-      this.board.shiftBlockZ(-1);
-    } else if (this.cameraRot >= (3 * Math.PI) / 4 && this.cameraRot < (5 * Math.PI) / 4) {
-      // 3Pi / 4 <= x < 5Pi / 4
-      this.board.shiftBlockX(-1);
-    } else if (this.cameraRot >= (5 * Math.PI) / 4 && this.cameraRot < (7 * Math.PI) / 4) {
-      // 5Pi / 4 <= x < 7Pi / 4
-      this.board.shiftBlockZ(1);
-    } else {
-      // -Pi / 4 <= x < Pi / 4
-      this.board.shiftBlockX(1);
-    }
-  },
+ 
 
   // Drop block one level.
   dropBlock: function () {
     this.dropCounter = this.dropThreshold;
   },
 
-  // Rotate block about x-axis.
-  rotateBlockX: function () {
-    this.board.rotateBlockX();
-  },
-
-  // Rotate block about y-axis.
-  rotateBlockY: function () {
-    this.board.rotateBlockY();
-  },
-
-  // Rotate block about z-axis.
-  rotateBlockZ: function () {
-    this.board.rotateBlockZ();
-  },
 
   // Rotate the camera. We want to keep the angle at a value from 0
   // to 2Pi.
-  rotateCamera: function (rotationAmount) {
-    // Rotate the camera.
-    this.cameraRot += rotationAmount;
-
-    // Make sure we're within the range.
-    if (this.cameraRot < 0) {
-      this.cameraRot += 2 * Math.PI;
-    }
-    if (this.cameraRot > 2 * Math.PI) {
-      this.cameraRot -= 2 * Math.PI;
-    }
-  },
 
   // Load external resources.
   loadExternalResources: function () {
@@ -744,9 +639,6 @@ Game.prototype = {
         this.speedModifier = MINIMUM_SPEED_MODIFIER;
       }
     }
-
-
-
     // Update the level and points labels.
     this.updateLevelLabel();
     this.updatePointsLabel();
@@ -759,19 +651,8 @@ Game.prototype = {
     requestAnimationFrame(function () {
       thisGame.animate();
     });
-    if (this.paused) this.orbit.update()
-    // We only want to animate things if the game hasn't ended
-    // and isn't paused.
-    if (this.keepPlaying && !this.paused) {
-      // Move the camera
-      if (this.rotateCameraLeft) this.rotateCamera(-ROTATION_AMOUNT);
-      if (this.rotateCameraRight) this.rotateCamera(ROTATION_AMOUNT);
-      this.camera.position.y = CAMERA_Y;
-      this.camera.position.x = Math.sin(this.cameraRot) * CAMERA_X;
-      this.camera.position.z = Math.cos(this.cameraRot) * CAMERA_Z;
-      this.camera.lookAt(new THREE.Vector3(CAMERA_POINT_X, CAMERA_POINT_Y, CAMERA_POINT_Z));
-    }
-
+    ////////
+    
     // Render the scene.
     this.renderer.render(this.scene, this.camera);
   }

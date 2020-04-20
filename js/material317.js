@@ -29,7 +29,7 @@ function Material317() {
             specular: 0x222222,
             // map: texture317.metal2,
             bumpMap: texture317.metal2Bump,
-            envMap: texture317.portal360,
+            envMap: texture317.portalFonCube,
             bumpScale: 0.5
         });
     }
@@ -64,6 +64,7 @@ function Material317() {
             specular: 0x222222,
             map: texture317.portalCubeD,
             emissiveMap: texture317.portalCubeL,
+            emissiveIntensity:2,
             emissive: color,
         })
     }

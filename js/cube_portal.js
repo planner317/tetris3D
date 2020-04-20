@@ -8,7 +8,7 @@ function PortalCube() {
 
   function loadModel() {
     portalCube.traverse(function (child) {
-      portalCube.scale.set(1.63, 1.63, 1.63)
+      portalCube.scale.set(1.575, 1.575, 1.575)
       portalCube.children[0].castShadow = true;
       portalCube.children[0].receiveShadow = true;
       portal317.Cube = portalCube
