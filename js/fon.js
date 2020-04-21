@@ -8,7 +8,7 @@ function Fon317() {
         if (xhr.lengthComputable) {
 
             var percentComplete = xhr.loaded / xhr.total * 100;
-            console.log("fon= "+ Math.round(percentComplete, 2) + '% downloaded');
+            console.log("fon= " + Math.round(percentComplete, 2) + '% downloaded');
 
         }
     };
@@ -17,7 +17,7 @@ function Fon317() {
 
     var manager = new THREE.LoadingManager();
 
-///////////////////////
+    ///////////////////////
     new THREE.MTLLoader(manager)
         .setPath('model/')
         .load('fon.mtl', function (materials) {
@@ -30,7 +30,7 @@ function Fon317() {
                 .load('fon.obj', function (object) {
 
                     object.position.y = - 300;
-                    object.scale.set(1,1,1)
+                    object.scale.set(1, 1, 1)
                     fon317.fon = object
 
                 }, onProgress, onError);

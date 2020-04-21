@@ -1,6 +1,22 @@
 "use strict";
 
 // Global constants.
+const COL = [
+  0xFF0000,
+  0xff007e,
+  0xff00fc,
+  0x6600ff,
+  0x002aff,
+  0x0096ff,
+  0x00d8ff,
+  0x00ffc6,
+  0x00ff3c,
+  0x48ff00,
+  0xfff000,
+  0xff9c00,
+  0xff6000,
+  0xff3600,
+]
 const TESTING = !true;
 const FLIP_BOARD = !true;
 const CORNER_CUBES = !true;
@@ -47,7 +63,7 @@ function setPole(e) {
 function setForm(e) {
   console.log(e.target.value);
   userGeometry = e.target.value
-  if (e.target.value==3) kasha=1
+  if (e.target.value == 3) kasha = 1
 }
 function setMat(e) {
   CUBMAT = e.target.value

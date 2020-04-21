@@ -29,6 +29,7 @@ var Game = function () {
   this.pointsLabel = document.getElementById("points-label");
 
   // Initialize some public variables.
+  this.animateMoveRotate;
   this.cubeMat = CUBMAT;
   this.cameraRot = 0;
   this.dropThreshold = 1;
@@ -36,7 +37,7 @@ var Game = function () {
   this.keepPlaying = false;
   this.paused = true;
   this.boardType = DEFAULT_BOARD;
-  this.boom =[]
+  this.boom = []
 
   // Initialize some flags.
   this.initialized = false;
@@ -52,6 +53,8 @@ var Game = function () {
   this.level = 0;
   this.levelCounter = 0;
   this.speedModifier = 1;
+  this.animateCounter = this.animateStep = 10;
+  this.go;
 
   // Canadian mode.
   this.canadianMode = true;
@@ -69,16 +72,17 @@ Game.prototype = {
   init: function () {
     // Set the flag.
     this.initialized = true;
-    if (kasha){
-      userGeometry = Math.floor(Math.random()*3);
-      game.cubeMat = Math.floor(Math.random()*5);
+    if (kasha) {
+      userGeometry = Math.floor(Math.random() * 3);
+      game.cubeMat = Math.floor(Math.random() * 5);
     }
     // Create the main scene for the 3D drawing
     this.scene = new THREE.Scene();
-    
+
     /////////////////// СФЕРА ДЛЯ ПАНОРАМЫ
     if (userGeometry == 2) this.scene.background = texture317.portalFonCube;
-     else this.scene.background = new THREE.Color(0x103044);
+    else this.scene.background = texture317.fon2;
+    //else this.scene.background = new THREE.Color(0x103044);
     // The renderer renders the scene using the objects, lights and camera.
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -94,7 +98,7 @@ Game.prototype = {
     window.addEventListener('resize', onWindowResize, false);
     // самера вращалка
     this.orbit = new THREE.OrbitControls(this.camera, this.renderer.domElement)
-    
+
     this.orbit.enablePan = false
     this.orbit.enableKeys = false
     this.orbit.minDistance = 50
@@ -165,7 +169,9 @@ Game.prototype = {
 
       // Add key listener.
       var thisGame = this;
-      document.addEventListener("keydown", function (e) {
+      document.addEventListener("keydown", this.keyHandler);
+
+      this.keyHandler = function (e) {
         console.log("keydown:", e.key);
         if (e.key == "ArrowUp" || e.key == "w") {
           if (!thisGame.paused) {
@@ -189,7 +195,7 @@ Game.prototype = {
         }
         if (e.key == " ") {
           if (!thisGame.paused) {
-            // thisGame.dropBlock();
+            thisGame.go = "down";
             game.board.advance();
           }
         }
@@ -200,6 +206,7 @@ Game.prototype = {
         }
         if (e.key == "f" || e.key == "3") {
           if (!thisGame.paused) {
+            thisGame.go = "rotateBlockY";
             thisGame.board.rotateBlockY();
           }
         }
@@ -226,35 +233,35 @@ Game.prototype = {
           if (thisGame.cubeMat >= material317.length) thisGame.cubeMat = 0;
           console.log(thisGame.cubeMat);
         }
-      });
+      }
     }
 
     // Attach the threeJS renderer to the HTML page
     document.body.append(this.renderer.domElement);
 
   },
-  
-  moveAndRotate:function (e){
 
-    var k=0;
-    var x= Math.abs( this.camera.position.x );
-    var z= Math.abs( this.camera.position.z );
-    var p=this.camera.position.x-this.camera.position.z
-    if ( p < 0 && x<z ) k=3
-    if ( p < 0 && x>z ) k=4
-    if ( p > 0 && x>z ) k=2
-    if ( p > 0 && x<z ) k=1
+  moveAndRotate: function (e) {
+
+    var k = 0;
+    var x = Math.abs(this.camera.position.x);
+    var z = Math.abs(this.camera.position.z);
+    var p = this.camera.position.x - this.camera.position.z
+    if (p < 0 && x < z) k = 3
+    if (p < 0 && x > z) k = 4
+    if (p > 0 && x > z) k = 2
+    if (p > 0 && x < z) k = 1
     console.log(k);
 
-    if (e=="left" && k==3 || e=="up" && k==2 || e=="right" && k==1 || e=="back" && k==4) this.board.shiftBlockX(-1);
-    if (e=="left" && k==1 || e=="up" && k==4 || e=="right" && k==3 || e=="back" && k==2) this.board.shiftBlockX(1);
-    if (e=="left" && k==4 || e=="up" && k==3 || e=="right" && k==2 || e=="back" && k==1) this.board.shiftBlockZ(-1);
-    if (e=="left" && k==2 || e=="up" && k==1 || e=="right" && k==4 || e=="back" && k==3) this.board.shiftBlockZ(1);
+    if (e == "left" && k == 3 || e == "up" && k == 2 || e == "right" && k == 1 || e == "back" && k == 4) { this.go = "xMinus"; this.board.shiftBlockX(-1) }
+    if (e == "left" && k == 1 || e == "up" && k == 4 || e == "right" && k == 3 || e == "back" && k == 2) { this.go = "xPlus"; this.board.shiftBlockX(1) }
+    if (e == "left" && k == 4 || e == "up" && k == 3 || e == "right" && k == 2 || e == "back" && k == 1) { this.go = "zMinus"; this.board.shiftBlockZ(-1) }
+    if (e == "left" && k == 2 || e == "up" && k == 1 || e == "right" && k == 4 || e == "back" && k == 3) { this.go = "zPlus"; this.board.shiftBlockZ(1) }
 
-    if (e=="rotateX" && k==3 || e=="rotateX" && k==1 || e=="rotateZ" && k==2 || e=="rotateZ" && k==4) this.board.rotateBlockX()
-    if (e=="rotateX" && k==2 || e=="rotateX" && k==4 || e=="rotateZ" && k==3 || e=="rotateZ" && k==1) this.board.rotateBlockZ()
+    if (e == "rotateX" && k == 3 || e == "rotateX" && k == 1 || e == "rotateZ" && k == 2 || e == "rotateZ" && k == 4) { this.go = "rotateBlockX"; this.board.rotateBlockX() }
+    if (e == "rotateX" && k == 2 || e == "rotateX" && k == 4 || e == "rotateZ" && k == 3 || e == "rotateZ" && k == 1) { this.go = "rotateBlockZ"; this.board.rotateBlockZ() }
   },
- 
+
 
   // Drop block one level.
   dropBlock: function () {
@@ -621,7 +628,7 @@ Game.prototype = {
   incrementLevelCounter: function () {
     // Increase score.
     this.score += 1000;
-    this.boom[Math.floor(Math.random()*this.boom.length)].play();
+    this.boom[Math.floor(Math.random() * this.boom.length)].play();
     // Increase level counter.
     this.levelCounter++;
 
@@ -652,7 +659,30 @@ Game.prototype = {
       thisGame.animate();
     });
     ////////
-    
+    if (thisGame.animateMoveRotate) {
+      document.removeEventListener("keydown", thisGame.keyHandler);
+      if (thisGame.go == "rotateBlockX") thisGame.board.block.orbitObj.rotateX(-Math.PI / 2 / thisGame.animateStep)
+      if (thisGame.go == "rotateBlockZ") thisGame.board.block.orbitObj.rotateZ(-Math.PI / 2 / thisGame.animateStep)
+      if (thisGame.go == "rotateBlockY") thisGame.board.block.orbitObj.rotateY(-Math.PI / 2 / thisGame.animateStep)
+
+      if (thisGame.go == "xMinus") thisGame.board.block.orbitObj.position.x -=( CUBE_SIZE / thisGame.animateStep)
+      if (thisGame.go == "xPlus") thisGame.board.block.orbitObj.position.x +=( CUBE_SIZE / thisGame.animateStep)
+      if (thisGame.go == "zMinus") thisGame.board.block.orbitObj.position.z -=( CUBE_SIZE / thisGame.animateStep)
+      if (thisGame.go == "zPlus") thisGame.board.block.orbitObj.position.z +=( CUBE_SIZE / thisGame.animateStep)
+      if (thisGame.go == "down") thisGame.board.block.orbitObj.position.y -=( CUBE_SIZE / thisGame.animateStep)
+
+
+      thisGame.animateCounter--;
+      if (thisGame.animateCounter <= 0) {
+        thisGame.animateCounter = thisGame.animateStep;
+        thisGame.animateMoveRotate = false;
+        thisGame.scene.remove(thisGame.board.block.orbitObj)
+        thisGame.board.block.removeFromBoard();
+        thisGame.board.block.addToBoard();
+
+        document.addEventListener("keydown", thisGame.keyHandler);
+      }
+    }
     // Render the scene.
     this.renderer.render(this.scene, this.camera);
   }

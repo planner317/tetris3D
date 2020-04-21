@@ -70,6 +70,14 @@ function Texture317() {
         }
     );
     ////////////////////////////
+    new THREE.TextureLoader().load("img/fon/portal_360.jpg",
+        (texture) => {
+            texture.mapping = THREE.EquirectangularRefractionMapping
+            this.glass = texture;
+        }
+    );
+
+    ////////////////////////////
     new THREE.TextureLoader().load("model/cube_heart.jpg",
         (texture) => {
             this.portalCubeD = texture;
@@ -88,11 +96,25 @@ function Texture317() {
     var urls = [
         path + 'right' + format,
         path + 'left' + format,
-        path + 'top' + format, 
+        path + 'top' + format,
         path + 'bottom' + format,
-        path + 'front' + format, 
+        path + 'front' + format,
         path + 'back' + format
     ];
 
     this.portalFonCube = new THREE.CubeTextureLoader().load(urls);
+
+  /////////////////////////////////
+    var path = 'img/fon/fon2/';
+    var format = '.jpg';
+    var urls = [
+        path + 'right' + format,
+        path + 'left' + format,
+        path + 'top' + format,
+        path + 'bottom' + format,
+        path + 'front' + format,
+        path + 'back' + format
+    ];
+
+    this.fon2 = new THREE.CubeTextureLoader().load(urls);
 }

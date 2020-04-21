@@ -7,6 +7,9 @@ var Cube = function (x = 0, y = 0, z = 0, color = 0xffffff, blockNumber = 0, att
   var g
   if (userGeometry == 0) g = new THREE.BoxGeometry(CUBE_SIZE , CUBE_SIZE , CUBE_SIZE );
   if (userGeometry == 1) g = new THREE.SphereBufferGeometry(20, 15, 15)
+  if (userGeometry == 4) {
+    g = box317.box.children[0].geometry
+  }
   if (userGeometry == 2) {
     this.cube = new THREE.Object3D().copy(portal317.Cube);
     this.cube.children[0].material = material317.portalCube(color);
@@ -148,10 +151,10 @@ Cube.prototype = {
 
   // Update the texture if one has been loaded.
   updateTexture: function () {
-    if (game.cubeMat == 0) this.cube.material = material317.metal2()
+    if (game.cubeMat == 0) this.cube.material = material317.metal2(this.color)
     if (game.cubeMat == 1) this.cube.material = material317.wood()
     if (game.cubeMat == 2) this.cube.material = material317.sponge(this.color)
-    if (game.cubeMat == 3) this.cube.material = material317.loose(this.color)
+    if (game.cubeMat == 3) this.cube.material = material317.glass(this.color)
     if (game.cubeMat == 4) this.cube.material = material317.stone()
   },
 

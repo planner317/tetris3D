@@ -234,7 +234,6 @@ Board.prototype = {
 
       // Remove it from the scene and the board.
       this.parent.scene.remove(cube.cube);
-      this.parent.scene.remove(cube.cubeOutline);
       this.grid[y][z][x] = 0;
     }
   },

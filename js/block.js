@@ -2,7 +2,7 @@
 
 /* Block Object.
  */
-var Block = function(blockType = 0, blockNumber = 0, x = 0, y = BOARD_HEIGHT - 1, z = 0) {
+var Block = function (blockType = 0, blockNumber = 0, x = 0, y = BOARD_HEIGHT - 1, z = 0) {
   // Make sure we're using a valid block.
   if (blockType < 0 || blockType >= blocks.length) {
     // It's not a valid block, so default to the first one.
@@ -39,7 +39,7 @@ var Block = function(blockType = 0, blockNumber = 0, x = 0, y = BOARD_HEIGHT - 1
 Block.prototype = {
   constructor: Block,
 
-  shiftX: function(offset = 1) {
+  shiftX: function (offset = 1) {
     // Actually update the block's position in the scene
     // and on the board.
     if (this.checkNewPosition(offset, 0, 0)) {
@@ -52,7 +52,7 @@ Block.prototype = {
     }
   },
 
-  shiftY: function(offset = 1) {
+  shiftY: function (offset = 1) {
     // Actually update the block's position in the scene
     // and on the board.
     if (this.checkNewPosition(0, offset, 0)) {
@@ -64,7 +64,7 @@ Block.prototype = {
     }
   },
 
-  shiftZ: function(offset = 1) {
+  shiftZ: function (offset = 1) {
     // Actually update the block's position in the scene
     // and on the board.
     if (this.checkNewPosition(0, 0, offset)) {
@@ -76,7 +76,7 @@ Block.prototype = {
     }
   },
 
-  rotateX: function() {
+  rotateX: function () {
     // Create new grid to store rotation for this block. The outer
     // array contains each slice along the Z-axis.
     var rotGrid = [];
@@ -117,7 +117,7 @@ Block.prototype = {
     }
   },
 
-  rotateY: function() {
+  rotateY: function () {
     // Create new grid to store rotation for this block. The outer
     // array contains each slice along the Z-axis.
     var rotGrid = [];
@@ -158,7 +158,7 @@ Block.prototype = {
     }
   },
 
-  rotateZ: function() {
+  rotateZ: function () {
     // Create new grid to store rotation for this block. The outer
     // array contains each slice along the Z-axis.
     var rotGrid = [];
@@ -199,7 +199,7 @@ Block.prototype = {
     }
   },
 
-  checkNewPosition: function(xOffset = 0, yOffset = 0, zOffset = 0) {
+  checkNewPosition: function (xOffset = 0, yOffset = 0, zOffset = 0) {
     // Set flag to let us know if the new position will work.
     var positionIsOpen = true;
 
@@ -214,8 +214,7 @@ Block.prototype = {
           // If there is a collision, position is not open.
           if (this.grid[iZ][iY][iX] == 1
             && this.parent.checkCollision(bX, bY, bZ, this.blockNumber)
-            )
-          {
+          ) {
             positionIsOpen = false;
           }
         }
@@ -226,19 +225,60 @@ Block.prototype = {
     return positionIsOpen;
   },
 
-  updatePosition: function(xOffset = 0, yOffset = 0, zOffset =0) {
+  updatePosition: function (xOffset = 0, yOffset = 0, zOffset = 0) {
     // We'll remove it from the board, apply the offsets, then add it again.
-    this.removeFromBoard();
+    //this.removeFromBoard();
+    this.animacionBlock()
     this.xStart += xOffset;
     this.xEnd += xOffset;
     this.yStart += yOffset;
     this.yEnd += yOffset;
     this.zStart += zOffset;
     this.zEnd += zOffset;
-    this.addToBoard();
+
+    //this.addToBoard();
   },
 
-  removeFromBoard: function() {
+  //////////////////////////////////////////////////// ANIMATION
+  animacionBlock: function () {
+    let myBlock = [];             //добавяю все кубы у блока что управляю
+    for (var y = 0; y < BOARD_HEIGHT; y++) {
+      for (var z = 0; z < BOARD_SIZE; z++) {
+        for (var x = 0; x < BOARD_SIZE; x++) {
+          if (this.parent.grid[y][z][x].blockNumber == this.blockNumber) {
+            myBlock.push(this.parent.grid[y][z][x]);
+          }
+        }
+      }
+    }
+    this.orbitObj = new THREE.Object3D();
+    let thisOrbitObj = this.orbitObj;
+    ////////////////////////////// определяю центр в координатах глобальной сетки 
+    let orbitPosX = this.xEnd - (this.size - 1) / 2
+    let orbitPosY = this.yEnd - (this.size - 1) / 2
+    let orbitPosZ = this.zEnd - (this.size - 1) / 2
+    ///////// переношу блок на нулевую позицию к orbitObj
+    myBlock.forEach(Cube => {
+      Cube.cube.position.x -= orbitPosX * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2
+      Cube.cube.position.y -= orbitPosY * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2
+      if (this.size == 2) Cube.cube.position.y -= CUBE_SIZE;
+      Cube.cube.position.z -= orbitPosZ * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2
+      thisOrbitObj.add(Cube.cube)
+    })
+    ///////// переношу orbitObj с нулевой позиции на место блока
+    this.orbitObj.position.set(
+      orbitPosX * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2,
+      orbitPosY * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2,
+      orbitPosZ * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2,
+    );
+    if (this.size == 2) this.orbitObj.position.y +=CUBE_SIZE;
+    this.parent.parent.scene.add(this.orbitObj);
+
+    game.animateMoveRotate = true
+
+  },
+
+  removeFromBoard: function () {
     // Loop through the board and remove the block.
     for (var y = 0; y < BOARD_HEIGHT; y++) {
       for (var z = 0; z < BOARD_SIZE; z++) {
@@ -251,7 +291,7 @@ Block.prototype = {
     }
   },
 
-  addToBoard: function() {
+  addToBoard: function () {
     // Start drawing cubes for the block.
     var cubeCount = 0;
     for (var iZ = 0; iZ < this.grid.length; iZ++) {
@@ -274,43 +314,37 @@ Block.prototype = {
             // Is there an attachment in the positive X direction?
             if (iX < this.grid[iZ][iY].length - 1
               && this.grid[iZ][iY][iX + 1] == 1
-              )
-            {
+            ) {
               attachments.xPos = true;
             }
             // Is there an attachment in the negative X direction?
             if (iX > 0
               && this.grid[iZ][iY][iX - 1] == 1
-              )
-            {
+            ) {
               attachments.xNeg = true;
             }
             // Is there an attachment in the positive Y direction?
             if (iY > 0
               && this.grid[iZ][iY - 1][iX] == 1
-              )
-            {
+            ) {
               attachments.yPos = true;
             }
             // Is there an attachment in the negative Y direction?
             if (iY < this.grid[iZ].length - 1
               && this.grid[iZ][iY + 1][iX] == 1
-              )
-            {
+            ) {
               attachments.yNeg = true;
             }
             // Is there an attachment in the positive Z direction?
             if (iZ < this.grid.length - 1
               && this.grid[iZ + 1][iY][iX] == 1
-              )
-            {
+            ) {
               attachments.zPos = true;
             }
             // Is there an attachment in the negative Z direction?
             if (iZ > 0
               && this.grid[iZ - 1][iY][iX] == 1
-              )
-            {
+            ) {
               attachments.zNeg = true;
             }
 
