@@ -68,7 +68,7 @@ h1 {
   position: absolute;
   width: 270px;
   padding: 5px;
-  margin: 10px;
+  margin: 120px 10px;
 }
 .mouse img{
   transform: translateY(10px);
@@ -84,21 +84,41 @@ h1 {
   margin: 10px;
   position: fixed;
   right: 0;
-  width: 70PX;
 }
-
+#viewNextBlock{
+  position: fixed;
+  height: 80px;
+  top: 0;
+  left:-80;
+  background: rgba(14, 14, 14, 0.4);
+  width: 480px;
+  border-bottom-right-radius: 20px;
+}
+#viewNextBlock img{
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(.51,-0.44,.17,1);
+  position: absolute;
+  top:0px;
+}
+#gridInfo{
+  line-height: 10px;
+  text-align: center;
+}
+#gridInfo div{
+  font-size: 24px;
+  padding: 5px 0;
+  letter-spacing: -4;
+}
 #overlay {
   background: rgba(14, 14, 14, 0.4);
   border-radius: 10px;
   box-sizing: border-box;
-  left: 50%;
+  left: 40%;
   padding: 1em;
   position: absolute;
   text-align: center;
-  top: 50%;
-  transform: translate(-50%, -75%);
   width: 270px;
-  margin: 10px;
+  margin: 120px auto;
 }
 
 #overlay #overlay-board-selector {

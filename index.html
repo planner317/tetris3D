@@ -7,9 +7,21 @@
 </head>
 
 <body>
+  <div id="viewNextBlock"></div>
   <div id="game-info">
-    <div id="level-label">Level 1</div>
-    <div id="points-label">Points: 0</div>
+    <div id="points-label">score: 0</div>
+    <div id="gridInfo">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 
     <div id="controls">
@@ -43,15 +55,15 @@
         <div class="style-select">
           <p>площадь поля</p>
           <p id="pole">4 x 4</p>
-          <input type="range" id="range" value="4" min="3" max="20" onchange="setPole(event);"><br>
+          <input type="range" id="range" value="4" min="3" max="6" onchange="setPole(event);"><br>
           
             <p class="flex">
             <span>форма</span><select onchange="setForm(event)">
-              <option value="2">portal</option>
-              <option value="4">куб сглаженый</option>
-              <option value="0">куб</option>
-              <option value="1">сфера</option>
-              <option value="3">каша</option>
+              <option value="portalBox">portal</option>
+              <option value="boxSmooth">куб сглаженый</option>
+              <option value="box">куб</option>
+              <option value="sphere">сфера</option>
+              <option value="random">каша</option>
             </select><br>
           </p>
           <p class="flex">
@@ -85,6 +97,7 @@
   <script src="js/boards.js"></script>
   <script src="js/blocks.js"></script>
   <script src="js/box317.js"></script>
+  <script src="js/gridInfo.js"></script>
 
 </body>
 
