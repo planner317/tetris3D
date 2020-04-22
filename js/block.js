@@ -202,7 +202,6 @@ Block.prototype = {
   checkNewPosition: function (xOffset = 0, yOffset = 0, zOffset = 0) {
     // Set flag to let us know if the new position will work.
     var positionIsOpen = true;
-
     // Loop through the grid.
     for (var iZ = 0; iZ < this.grid.length; iZ++) {
       for (var iY = 0; iY < this.grid[iZ].length; iY++) {
@@ -220,14 +219,12 @@ Block.prototype = {
         }
       }
     }
-
     // Return the result.
     return positionIsOpen;
   },
 
   updatePosition: function (xOffset = 0, yOffset = 0, zOffset = 0) {
     // We'll remove it from the board, apply the offsets, then add it again.
-    //this.removeFromBoard();
     this.animacionBlock()
     this.xStart += xOffset;
     this.xEnd += xOffset;
@@ -253,26 +250,25 @@ Block.prototype = {
     }
     this.orbitObj = new THREE.Object3D();
     let thisOrbitObj = this.orbitObj;
-    ////////////////////////////// определяю центр в координатах глобальной сетки 
-    let orbitPosX = this.xEnd - (this.size - 1) / 2
-    let orbitPosY = this.yEnd - (this.size - 1) / 2
-    let orbitPosZ = this.zEnd - (this.size - 1) / 2
+    ////////////////////////////// смещение от нуля к 0xz grida
+    let ofset = (BOARD_SIZE / 2) * CUBE_SIZE
+    ////////////////////////////// определяю координаты центра вращения
+    let orbitPosX = (this.xStart + this.size / 2) * CUBE_SIZE - ofset;
+    let orbitPosY = ((this.yStart - this.size + 1) + this.size / 2) * CUBE_SIZE;
+    let orbitPosZ = (this.zStart + this.size / 2) * CUBE_SIZE - ofset;
+    ///////// переношу orbitObj с нулевой позиции на место вращения блока
+    this.orbitObj.position.set(orbitPosX, orbitPosY, orbitPosZ)
+    this.parent.parent.scene.add(this.orbitObj);
     ///////// переношу блок на нулевую позицию к orbitObj
     myBlock.forEach(Cube => {
-      Cube.cube.position.x -= orbitPosX * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2
-      Cube.cube.position.y -= orbitPosY * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2
-      if (this.size == 2) Cube.cube.position.y -= CUBE_SIZE;
-      Cube.cube.position.z -= orbitPosZ * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2
+      // ннжно отнять от координат кубика центр вращения и получу относительные координаты от ц.вращ. 
+      Cube.cube.position.x -= orbitPosX
+      Cube.cube.position.y -= orbitPosY
+      Cube.cube.position.z -= orbitPosZ
       thisOrbitObj.add(Cube.cube)
     })
-    ///////// переношу orbitObj с нулевой позиции на место блока
-    this.orbitObj.position.set(
-      orbitPosX * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2,
-      orbitPosY * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2,
-      orbitPosZ * CUBE_SIZE - CUBE_SIZE * (BOARD_SIZE / 2) + CUBE_SIZE / 2,
-    );
-    if (this.size == 2) this.orbitObj.position.y +=CUBE_SIZE;
-    this.parent.parent.scene.add(this.orbitObj);
+
+
 
     game.animateMoveRotate = true
 

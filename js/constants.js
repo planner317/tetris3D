@@ -26,14 +26,14 @@ const ADD_GRID_HELPER = !true;
 const ADD_AXIS_HELPER = !true;
 const CUBE_SIZE = 40;
 let BOARD_SIZE = 4;
-let userGeometry = 2;
+let userGeometry = "portalBox";
 let CUBMAT = 0;
-let kasha = 0;
+let mix = 0;
 const BOARD_HEIGHT = 10;
 const DEFAULT_BOARD = 0;
 const ROTATION_AMOUNT = 0.05;
 const MINIMUM_SPEED_MODIFIER = 0.1;
-
+const COLLECTION_GEOMETRY=["box", "boxSmooth", "portalBox", "sphere"];
 // Testing
 var camera_y, camera_x, camera_z;
 if (TESTING) {
@@ -62,8 +62,8 @@ function setPole(e) {
 }
 function setForm(e) {
   console.log(e.target.value);
-  userGeometry = e.target.value
-  if (e.target.value == 3) kasha = 1
+  if (e.target.value == "random") mix = 1
+  else  userGeometry = e.target.value
 }
 function setMat(e) {
   CUBMAT = e.target.value

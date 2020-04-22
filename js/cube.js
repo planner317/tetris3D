@@ -5,16 +5,16 @@
 var Cube = function (x = 0, y = 0, z = 0, color = 0xffffff, blockNumber = 0, attachments = {}) {
   // Create geometry and material for cube.
   var g
-  if (userGeometry == 0) g = new THREE.BoxGeometry(CUBE_SIZE , CUBE_SIZE , CUBE_SIZE );
-  if (userGeometry == 1) g = new THREE.SphereBufferGeometry(20, 15, 15)
-  if (userGeometry == 4) {
+  if (userGeometry == "box") g = new THREE.BoxGeometry(CUBE_SIZE , CUBE_SIZE , CUBE_SIZE );
+  if (userGeometry == "sphere") g = new THREE.SphereBufferGeometry(20, 15, 15)
+  if (userGeometry == "boxSmooth") {
     g = box317.box.children[0].geometry
   }
-  if (userGeometry == 2) {
+  if (userGeometry == "portalBox") {
     this.cube = new THREE.Object3D().copy(portal317.Cube);
     this.cube.children[0].material = material317.portalCube(color);
   }
-  if (userGeometry != 2) {
+  if (userGeometry != "portalBox") {
 
     var cubeMaterial = new THREE.MeshPhongMaterial({
       color: color,

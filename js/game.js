@@ -12,6 +12,7 @@ function startGame() {
   // Start the game/animation loop.
   game.animate();
   game.board.advance();
+  document.documentElement.requestFullscreen()
 }
 
 var Game = function () {
@@ -25,7 +26,6 @@ var Game = function () {
   this.mesh = null;
 
   // We need to be able to access a couple DOM elements.
-  this.levelLabel = document.getElementById("level-label");
   this.pointsLabel = document.getElementById("points-label");
 
   // Initialize some public variables.
@@ -50,8 +50,6 @@ var Game = function () {
   // speed modifier is changed to 70% of its current value
   // for every two levels that have been reached.
   this.score = 0;
-  this.level = 0;
-  this.levelCounter = 0;
   this.speedModifier = 1;
   this.animateCounter = this.animateStep = 10;
   this.go;
@@ -72,15 +70,15 @@ Game.prototype = {
   init: function () {
     // Set the flag.
     this.initialized = true;
-    if (kasha) {
-      userGeometry = Math.floor(Math.random() * 3);
+    if (mix) {
+      userGeometry = COLLECTION_GEOMETRY[Math.floor(Math.random() * COLLECTION_GEOMETRY.length)];
       game.cubeMat = Math.floor(Math.random() * 5);
     }
     // Create the main scene for the 3D drawing
     this.scene = new THREE.Scene();
 
     /////////////////// СФЕРА ДЛЯ ПАНОРАМЫ
-    if (userGeometry == 2) this.scene.background = texture317.portalFonCube;
+    if (userGeometry == "portalBox") this.scene.background = texture317.portalFonCube;
     else this.scene.background = texture317.fon2;
     //else this.scene.background = new THREE.Color(0x103044);
     // The renderer renders the scene using the objects, lights and camera.
@@ -97,7 +95,7 @@ Game.prototype = {
 
     window.addEventListener('resize', onWindowResize, false);
     // самера вращалка
-    this.orbit = new THREE.OrbitControls(this.camera, this.renderer.domElement)
+    this.orbit = new THREE.OrbitControls(this.camera, document.body)
 
     this.orbit.enablePan = false
     this.orbit.enableKeys = false
@@ -169,7 +167,7 @@ Game.prototype = {
 
       // Add key listener.
       var thisGame = this;
-      document.addEventListener("keydown", this.keyHandler);
+      window.onkeydown = thisGame.keyHandler;
 
       this.keyHandler = function (e) {
         console.log("keydown:", e.key);
@@ -223,9 +221,9 @@ Game.prototype = {
         }
 
         if (e.key == "Escape") {
-          thisGame.endGame();
+          thisGame.togglePause()
         }
-        if (e.key == "c" || e.key == "C") {
+        if (e.key == "c" ) {
           thisGame.toggleCanadianMode();
         }
         if (e.key == "z") {
@@ -281,7 +279,7 @@ Game.prototype = {
     // Attempt to load music. To do this, we need to create a listener
     // and add it to the camera, then we need to create a global audio
     // source.
-    if (userGeometry == 2) {
+    if (userGeometry == "portalBox") {
       this.sound = new Audio("audio/portal.mp3")
       this.sound.play()
       this.boom[0] = new Audio("audio/p1.mp3")
@@ -472,34 +470,12 @@ Game.prototype = {
     //this.showBoardSelectorOverlay();
   },
 
-  // Update the level label.
-  updateLevelLabel: function () {
-    this.levelLabel.innerHTML = "Level " + (this.level + 1);
-  },
-
-  // Update the points label.
-  updatePointsLabel: function () {
-    this.pointsLabel.innerHTML = "Points: " + this.score;
-  },
-
 
   // Start the game.
   startGame: function () {
     this.keepPlaying = true;
     this.paused = false;
 
-    // Reset everything.
-    this.score = 0;
-    this.level = 0;
-    this.levelCounter = 0;
-    this.speedModifier = 1;
-    this.board.reset();
-
-    // Update the level and points labels.
-    this.updateLevelLabel();
-    this.updatePointsLabel();
-
-    // Remove the overlay.
     this.hideOverlay();
 
   },
@@ -598,28 +574,6 @@ Game.prototype = {
     }
   },
 
-  // Toggle debug mode.
-  toggleDebugMode: function () {
-    if (this.debugMode) {
-      this.debugMode = false;
-
-      this.board.setBoard(this.boardType);
-    } else {
-      this.debugMode = true;
-
-      this.board.setBoard(3);
-    }
-
-    // We're starting over, so restart the game.
-    if (this.keepPlaying) {
-      this.endGame();
-      this.startGame();
-    }
-
-    // Update the level and points labels.
-    this.updateLevelLabel();
-    this.updatePointsLabel();
-  },
 
   // Increment the level counter. If the counter reaches 3,
   // we will reset it, increase the level and score. The speed
@@ -627,28 +581,10 @@ Game.prototype = {
 
   incrementLevelCounter: function () {
     // Increase score.
-    this.score += 1000;
+    this.score += 1;
     this.boom[Math.floor(Math.random() * this.boom.length)].play();
-    // Increase level counter.
-    this.levelCounter++;
 
-    // Do we need to increase the level?
-    if (this.levelCounter >= 3) {
-      // Reset the counter.
-      this.levelCounter = 0;
-
-      // Increase the level.
-      this.level++;
-
-      // Speed modifier should only get as low as the minimum
-      // speed modifer threshold.
-      if (this.speedModifier < MINIMUM_SPEED_MODIFIER) {
-        this.speedModifier = MINIMUM_SPEED_MODIFIER;
-      }
-    }
-    // Update the level and points labels.
-    this.updateLevelLabel();
-    this.updatePointsLabel();
+    this.pointsLabel.innerHTML="score: "+ this.score;
   },
 
   // This is the game/animation loop
@@ -659,8 +595,8 @@ Game.prototype = {
       thisGame.animate();
     });
     ////////
-    if (thisGame.animateMoveRotate) {
-      document.removeEventListener("keydown", thisGame.keyHandler);
+    if (thisGame.animateMoveRotate && thisGame.board.block.orbitObj) {
+      window.onkeydown = "";
       if (thisGame.go == "rotateBlockX") thisGame.board.block.orbitObj.rotateX(-Math.PI / 2 / thisGame.animateStep)
       if (thisGame.go == "rotateBlockZ") thisGame.board.block.orbitObj.rotateZ(-Math.PI / 2 / thisGame.animateStep)
       if (thisGame.go == "rotateBlockY") thisGame.board.block.orbitObj.rotateY(-Math.PI / 2 / thisGame.animateStep)
@@ -680,7 +616,8 @@ Game.prototype = {
         thisGame.board.block.removeFromBoard();
         thisGame.board.block.addToBoard();
 
-        document.addEventListener("keydown", thisGame.keyHandler);
+        window.onkeydown = thisGame.keyHandler;
+        gridInofUpdate();
       }
     }
     // Render the scene.

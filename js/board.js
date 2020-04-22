@@ -2,6 +2,7 @@
 
 /* Board Object.
  */
+var n = 0;
 var Board = function (size, height) {
   // Create grid for the board and fill it with zeros.
   this.grid = [];
@@ -132,6 +133,7 @@ Board.prototype = {
   },
 
   setBoard: function (i = 0) {
+
     // Make sure we're using a valid board.
     if (i < 0 || i >= boards.length) {
       // It's not a valid board, so default to the first one.
@@ -176,12 +178,9 @@ Board.prototype = {
   },
 
   addRandomBlock: function () {
-    if (this.parent.debugMode) {
-      this.addBlock(0);
-    } else {
-      var blockType = Math.floor(Math.random() * blocks.length);
-      this.addBlock(blockType);
-    }
+    this.addBlock(nextBlock.blocks.pop()); 
+      nextBlock.blocks.unshift(Math.floor(Math.random() * blocks.length));
+      nextBlock.update()
   },
 
   addCube: function (
@@ -323,6 +322,7 @@ Board.prototype = {
         }
       }
 
+
       // Was the layer complete?
       if (thisLayerComplete) {
         // It was, so add the layer to the array and remove all the
@@ -451,6 +451,7 @@ Board.prototype = {
   // layers are completed again.
   advanceLayers: function (layersComplete = []) {
     // Loop through the completed layers.
+
     for (var i = 0; i < layersComplete.length; i++) {
       // If the bottom layer was cleared, we only want to shift things
       // down to it if we're using a blank board. For any layers above
@@ -504,9 +505,9 @@ Board.prototype = {
 
     // We only want to check the layers when the block has stopped dropping.
     if (blockStopped) {
-      if (kasha){
-        userGeometry = Math.floor(Math.random()*3);
-        game.cubeMat = Math.floor(Math.random()*5);
+      if (mix) {
+        userGeometry = COLLECTION_GEOMETRY[Math.floor(Math.random() * COLLECTION_GEOMETRY.length)];
+        game.cubeMat = Math.floor(Math.random() * 5);
       }
       // Check for layer completions and remove any completed layers.
       var layersComplete = this.checkLayers();
@@ -522,6 +523,12 @@ Board.prototype = {
 
       // Show us what the board looks like after we've advanced everything.
       console.log(this);
+      gridInofUpdate();
+      ///////////////////////////// убераю события нажатия
+      window.onkeydown ="";
+      window.onkeyup = ()=>{  // включаю только при отжатии любой кнопки
+        window.onkeydown = window.onkeydown = game.keyHandler;
+      }
     }
   }
 };

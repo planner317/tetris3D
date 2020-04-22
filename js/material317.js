@@ -33,14 +33,14 @@ function Material317() {
     //////////////////////////////////////////////////
     this.glass = (color = 0xffffff) => {
         return new THREE.MeshPhysicalMaterial( {
-            map: null,
+          //  map: null,
             color: color,
             metalness: 1,
             roughness: 0,
-            opacity: 0.7,
+            opacity: 0.8,
             side: THREE.BackSide,
             transparent: true,
-            envMapIntensity: 2,
+            envMapIntensity: 1,
             premultipliedAlpha: true,
             envMap: texture317.fon2,
     })

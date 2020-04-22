@@ -46,28 +46,7 @@ const BLOCK_1 = {
   ]
 };
 blocks.push(BLOCK_1);
-////////////////////// I
-const BLOCK_11 = {
-  color: COL[7], size: 3, depth: 3, height: 3, width: 3,
-  grid: [
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0]
-    ],
-    [
-      [0, 1, 0],
-      [0, 1, 0],
-      [0, 1, 0]
-    ],
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0]
-    ]
-  ]
-};
-blocks.push(BLOCK_11);
+
 ////////////////////// J
 const BLOCK_2 = {
   color: COL[2], size: 3, depth: 3, height: 3, width: 3,
@@ -193,7 +172,7 @@ const BLOCK_8 = {
     ]
   ]
 };
-blocks.push(BLOCK_7);
+blocks.push(BLOCK_8);
 ////////////////////// ■
 const BLOCK_9 = {
   color: COL[9], size: 2, depth: 2, height: 2, width: 2,
@@ -209,3 +188,25 @@ const BLOCK_9 = {
   ]
 };
 blocks.push(BLOCK_9);
+////////////////////// I
+const BLOCK_10 = {
+  color: COL[7], size: 3, depth: 3, height: 3, width: 3,
+  grid: [
+    [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0]
+    ],
+    [
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0]
+    ],
+    [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0]
+    ]
+  ]
+};
+blocks.push(BLOCK_10);
