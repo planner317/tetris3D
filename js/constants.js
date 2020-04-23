@@ -29,6 +29,7 @@ let BOARD_SIZE = 4;
 let userGeometry = "portalBox";
 let CUBMAT = 0;
 let mix = 0;
+let mobil = 1;
 const BOARD_HEIGHT = 10;
 const DEFAULT_BOARD = 0;
 const ROTATION_AMOUNT = 0.05;

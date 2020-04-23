@@ -24,62 +24,66 @@
     </div>
   </div>
 
-    <div id="controls">
-      <h3>Controls</h3>
-      <p><b>W A S D</b><br><span class="control-description">- Передвинуть фигуру</span></p>
-      <p><span class="control-description"><img src="./img/MouseL.png"> вражать камеру <img src="./img/MouseM.png"> приблизить</span></span></p>
-      <p>Q E F </b><br>- Вращать фигуру</p>
-      <p><b>Space</b><br><span class="control-description">- вниз</span></p>
-      <p><b>Enter Escape</b><br><span class="control-description mouse">- Pause </span></p>
-      <p><b>M</b><br><span class="control-description">- приглушить музыку</span></p>
-      <p><b>C</b><br><span class="control-description">- убрать текстуру</span></p>
+  <div id="cameraOrbit"></div>
+  <div id="rotateControl"></div>
+  <div id="debag"></div>
+  <div id="controls">
+    <h3>Controls</h3>
+    <p><b>W A S D</b><br><span class="control-description">- Передвинуть фигуру</span></p>
+    <p><span class="control-description"><img src="./img/MouseL.png"> вражать камеру <img src="./img/MouseM.png">
+        приблизить</span></span></p>
+    <p>Q E F </b><br>- Вращать фигуру</p>
+    <p><b>Space</b><br><span class="control-description">- вниз</span></p>
+    <p><b>Enter Escape</b><br><span class="control-description mouse">- Pause </span></p>
+    <p><b>M</b><br><span class="control-description">- приглушить музыку</span></p>
+    <p><b>C</b><br><span class="control-description">- убрать текстуру</span></p>
+  </div>
+
+
+
+  <div id="overlay">
+    <div id="overlay-start-game" class="hidden">
+      <h1>New Game</h1>
     </div>
 
-
-
-    <div id="overlay">
-      <div id="overlay-start-game" class="hidden">
-        <h1>New Game</h1>
-      </div>
-
-      <div id="overlay-paused" class="hidden">
-        <h1>PAUSED</h1>
-      </div>
-
-      <div id="overlay-game-over" class="hidden">
-        <h1>GAME OVER</h1>
-      </div>
-
-      <div id="overlay-board-selector">
-        <p>Настройка игры:</p>
-        <div class="style-select">
-          <p>площадь поля</p>
-          <p id="pole">4 x 4</p>
-          <input type="range" id="range" value="4" min="3" max="6" onchange="setPole(event);"><br>
-          
-            <p class="flex">
-            <span>форма</span><select onchange="setForm(event)">
-              <option value="portalBox">portal</option>
-              <option value="boxSmooth">куб сглаженый</option>
-              <option value="box">куб</option>
-              <option value="sphere">сфера</option>
-              <option value="random">каша</option>
-            </select><br>
-          </p>
-          <p class="flex">
-            <span>материал</span><select onchange="setMat(event)">
-              <option value="0">металл</option>
-              <option value="1">дерево</option>
-              <option value="2">губка</option>
-              <option value="3">стекло</option>
-              <option value="4">камень</option>
-            </select>
-          </p>
-        </div>
-
-        <p id="overlay-play-button"><span class="button" onclick="startGame();">Play</span></p>
-      </div>
+    <div id="overlay-paused" class="hidden">
+      <h1>PAUSED</h1>
     </div>
+
+    <div id="overlay-game-over" class="hidden">
+      <h1>GAME OVER</h1>
+    </div>
+
+    <div id="overlay-board-selector">
+      <p>Настройка игры:</p>
+      <div class="style-select">
+        <p>площадь поля</p>
+        <p id="pole">4 x 4</p>
+        <input type="range" id="range" value="4" min="3" max="6" onchange="setPole(event);"><br>
+
+        <p class="flex">
+          <span>форма</span><select onchange="setForm(event)">
+            <option value="portalBox">portal</option>
+            <option value="boxSmooth">куб сглаженый</option>
+            <option value="box">куб</option>
+            <option value="sphere">сфера</option>
+            <option value="random">каша</option>
+          </select><br>
+        </p>
+        <p class="flex">
+          <span>материал</span><select onchange="setMat(event)">
+            <option value="0">металл</option>
+            <option value="1">дерево</option>
+            <option value="2">губка</option>
+            <option value="3">стекло</option>
+            <option value="4">камень</option>
+          </select>
+        </p>
+      </div>
+
+      <p id="overlay-play-button"><span class="button" onclick="startGame();">Play</span></p>
+    </div>
+  </div>
 
 
   <script src="js/three.min.js"></script>
