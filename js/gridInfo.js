@@ -17,15 +17,6 @@ function gridInofUpdate() {
 
     }
 }
-let rotateControl = document.getElementById("rotateControl")
-rotateControl.onmousedown=(e)=>{
-    debag.innerText ="входд x= " +e.clientX + " y= "+ e.clientY
-}
-rotateControl.onmouseout =(e)=>{
-    debag.innerText ="выход x= " +e.clientX + " y= "+ e.clientY
-}
-
-
 
 let viewNextBlockElement = document.getElementById("viewNextBlock");
 let nextBlock = new ViewNextBlocks()

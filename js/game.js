@@ -95,15 +95,13 @@ Game.prototype = {
 
     window.addEventListener('resize', onWindowResize, false);
     // самера вращалка
-    this.orbit = new THREE.OrbitControls(this.camera,
-      (mobil)? cameraOrbit : document.body)
+    this.orbit = new THREE.OrbitControls(this.camera, document.body)
 
     this.orbit.enablePan = false
     this.orbit.enableKeys = false
     this.orbit.minDistance = 50
     this.orbit.maxDistance = 1000
     this.orbit.target.y = CAMERA_POINT_Y
-    if (mobil) this.orbit.rotateSpeed=0.2;
     this.orbit.update()
     // Add light to the scene.
     var ambientLight = new THREE.AmbientLight(0x454545);
