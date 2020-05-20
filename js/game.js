@@ -95,7 +95,7 @@ Game.prototype = {
 
     window.addEventListener('resize', onWindowResize, false);
     // самера вращалка
-    this.orbit = new THREE.OrbitControls(this.camera, cameraRotate)
+    this.orbit = new THREE.OrbitControls(this.camera, document.body)
 
     this.orbit.enablePan = false
     this.orbit.enableKeys = false
@@ -238,18 +238,6 @@ Game.prototype = {
     document.body.append(this.renderer.domElement);
 
   },
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   moveAndRotate: function (e) {

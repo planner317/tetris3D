@@ -36,7 +36,7 @@ function Ddd() {
     t.scene.add(t.pointL)
 
     ///////////////////////////////////////////////////////
-    t.ax = new THREE.AxesHelper(200)
+    t.ax = new THREE.AxesHelper(20)
     t.scene.add(t.ax)
 
     t.plane = new THREE.Mesh(
@@ -52,8 +52,7 @@ function Ddd() {
         if (xhr.lengthComputable) {
 
             var percentComplete = xhr.loaded / xhr.total * 100;
-            console.log("model= " + Math.round(percentComplete, 2) + '% downloaded');
-
+            log.innerHTML = "model= " + Math.round(percentComplete, 2) + '% downloaded';
         }
     };
 
@@ -75,7 +74,7 @@ function Ddd() {
                     object.children[0].castShadow=1
                     t.scorpion = object
                     t.scene.add(object)
-
+                    log.innerHTML = "texture download ..."
                 }, onProgress, onError);
 
         });
